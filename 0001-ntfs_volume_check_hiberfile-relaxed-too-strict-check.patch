@@ -1,0 +1,63 @@
+From 0afe121e7b71c18a0b5b2dad21b05b3077abd9c9 Mon Sep 17 00:00:00 2001
+From: Dick Marinus <dick@mrns.nl>
+Date: Fri, 11 Dec 2015 21:23:28 +0100
+Subject: [PATCH] ntfs_volume_check_hiberfile: relaxed too strict check: if the
+ hiberfil.sys header has garbage then the volume is not hibernated
+
+(backported 64f9f0dc1a7ed9766dac431b1f300536c394ec91 from ntfs-3g)
+---
+ fs/ntfs/super.c | 23 ++++-------------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
+
+diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
+index 1b38abd..f433d85 100644
+--- a/fs/ntfs/super.c
++++ b/fs/ntfs/super.c
+@@ -1254,11 +1254,9 @@ static bool load_and_check_logfile(ntfs_volume *vol,
+  *
+  * If hiberfil.sys exists and is larger than 4kiB in size, we need to read the
+  * hiberfil header (which is the first 4kiB).  If this begins with "hibr",
+- * Windows is definitely suspended.  If it is completely full of zeroes,
+- * Windows is definitely not hibernated.  Any other case is treated as if
++ * Windows is definitely suspended.  Any other case is treated as if
+  * Windows is suspended.  This caters for the above mentioned caveat of a
+- * system with many volumes where no "hibr" magic would be present and there is
+- * no zero header.
++ * system with many volumes where no "hibr" magic would be present.
+  *
+  * Return 0 if Windows is not hibernated on the volume, >0 if Windows is
+  * hibernated on the volume, and -errno on error.
+@@ -1268,7 +1266,7 @@ static int check_windows_hibernation_status(ntfs_volume *vol)
+ 	MFT_REF mref;
+ 	struct inode *vi;
+ 	struct page *page;
+-	u32 *kaddr, *kend;
++	u32 *kaddr;
+ 	ntfs_name *name = NULL;
+ 	int ret = 1;
+ 	static const ntfschar hiberfil[13] = { cpu_to_le16('h'),
+@@ -1330,20 +1328,7 @@ static int check_windows_hibernation_status(ntfs_volume *vol)
+ 				"system volume.");
+ 		goto unm_iput_out;
+ 	}
+-	kend = kaddr + NTFS_HIBERFIL_HEADER_SIZE/sizeof(*kaddr);
+-	do {
+-		if (unlikely(*kaddr)) {
+-			ntfs_debug("hiberfil.sys is larger than 4kiB "
+-					"(0x%llx), does not contain the "
+-					"\"hibr\" magic, and does not have a "
+-					"zero header.  Windows is hibernated "
+-					"on the volume.  This is not the "
+-					"system volume.", i_size_read(vi));
+-			goto unm_iput_out;
+-		}
+-	} while (++kaddr < kend);
+-	ntfs_debug("hiberfil.sys contains a zero header.  Windows is not "
+-			"hibernated on the volume.  This is the system "
++	ntfs_debug("Windows is not hibernated on the volume.  This is the system "
+ 			"volume.");
+ 	ret = 0;
+ unm_iput_out:
+-- 
+2.5.0
+
