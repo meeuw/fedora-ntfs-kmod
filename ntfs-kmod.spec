@@ -13,7 +13,7 @@ URL: http://www.kernel.org
 #cd linux-stable
 #git times # https://git.wiki.kernel.org/index.php/ExampleScripts
 #tar cjf linux-fs-ntfs-${VERSION}.tar.xz fs/ntfs/
-Source0: linux-fs-ntfs-4.18.5.tar.xz
+Source0: linux-fs-ntfs-4.18.16.tar.xz
 Patch0: 0001-ntfs_volume_check_hiberfile-relaxed-too-strict-check.patch
 
 BuildRequires:  %{_bindir}/kmodtool
@@ -76,6 +76,9 @@ Dummy package
 %files -n ntfs-kmod-common
 
 %changelog
+* Tue Nov 6 2018 Dick Marinus <dick@mrns.nl> - 0-9
+- linux-fs-ntfs-4.18.16
+
 * Thu Sep 13 2018 Dick Marinus <dick@mrns.nl> - 0-8
 - linux-fs-ntfs-4.18.5
 
