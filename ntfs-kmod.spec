@@ -2,8 +2,8 @@
 #rpmbuild --rebuild --define='kernels $(uname -r)' whatever.srpm
 #%global buildforkernels akmod
 Name: ntfs-kmod
-Version: 0
-Release: 8%{?dist}
+Version: 4.20.2
+Release: 1%{?dist}
 Summary: Akmod package for kernel mode NTFS module
 
 License: GPL
@@ -13,7 +13,7 @@ URL: http://www.kernel.org
 #cd linux-stable
 #git times # https://git.wiki.kernel.org/index.php/ExampleScripts
 #tar cjf linux-fs-ntfs-${VERSION}.tar.xz fs/ntfs/
-Source0: linux-fs-ntfs-4.18.16.tar.xz
+Source0: linux-fs-ntfs-4.20.3.tar.xz
 Patch0: 0001-ntfs_volume_check_hiberfile-relaxed-too-strict-check.patch
 
 BuildRequires:  %{_bindir}/kmodtool
@@ -76,6 +76,9 @@ Dummy package
 %files -n ntfs-kmod-common
 
 %changelog
+* Wed Jan 23 2019 Dick Marinus <dick@mrns.nl> - 4.20.2-1
+- linux-fs-ntfs-4.20.2
+
 * Tue Nov 6 2018 Dick Marinus <dick@mrns.nl> - 0-9
 - linux-fs-ntfs-4.18.16
 
