@@ -2,7 +2,7 @@
 #rpmbuild --rebuild --define='kernels $(uname -r)' whatever.srpm
 #%global buildforkernels akmod
 Name: ntfs-kmod
-Version: 5.6.16
+Version: 5.9.8
 Release: 1%{?dist}
 Summary: Akmod package for kernel mode NTFS module
 
@@ -13,7 +13,7 @@ URL: http://www.kernel.org
 #cd linux-stable
 #git times # https://git.wiki.kernel.org/index.php/ExampleScripts
 #tar cjf linux-fs-ntfs-${VERSION}.tar.xz fs/ntfs/
-Source0: linux-fs-ntfs-5.6.16.tar.xz
+Source0: linux-fs-ntfs-5.9.8.tar.xz
 Patch0: 0001-ntfs_volume_check_hiberfile-relaxed-too-strict-check.patch
 
 BuildRequires:  %{_bindir}/kmodtool
@@ -76,6 +76,12 @@ Dummy package
 %files -n ntfs-kmod-common
 
 %changelog
+* Sun Nov 22 2020 Dick Marinus <dick@mrns.nl> - 5.9.8-1
+- linux-fs-ntfs-5.9.8
+
+* Wed Nov 11 2020 Dick Marinus <dick@mrns.nl> - 5.8.18-1
+- linux-fs-ntfs-5.8.18
+
 * Thu Jun 11 2020 Dick Marinus <dick@mrns.nl> - 5.6.16-1
 - linux-fs-ntfs-5.6.16
 
